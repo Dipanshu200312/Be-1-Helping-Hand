@@ -102,6 +102,45 @@
             border-radius: 2px;
         }
 
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        /* Responsive nav behavior */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                display: none; /* hidden by default on mobile */
+                width: 100%;
+                flex-direction: column;
+                gap: 0.75rem;
+                margin-top: 0.5rem;
+            }
+
+            nav.open {
+                display: flex;
+            }
+
+            nav a {
+                display: block;
+                padding: 0.6rem 0.25rem;
+                width: 100%;
+            }
+
+            header {
+                align-items: flex-start;
+            }
+        }
+
         .header-actions {
             display: flex;
             gap: 1rem;
@@ -646,6 +685,98 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Extra small screens adjustments */
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+
+            header {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.1rem;
+                gap: 8px;
+            }
+
+            .menu-toggle {
+                font-size: 1.35rem;
+            }
+
+            .container {
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+
+            .page-title h1 {
+                font-size: 1.6rem;
+            }
+
+            .page-title p {
+                font-size: 0.95rem;
+                padding: 0 0.25rem;
+            }
+
+            .card-header h2 {
+                font-size: 1.1rem;
+            }
+
+            .card-body {
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .donor-option label,
+            .frequency-option label,
+            .amount-option label {
+                padding: 0.65rem 0.8rem;
+                font-size: 0.95rem;
+            }
+
+            .amount-options {
+                grid-template-columns: repeat(1, 1fr);
+                gap: 0.75rem;
+            }
+
+            .custom-amount {
+                gap: 0.5rem;
+            }
+
+            .currency {
+                min-width: 36px;
+                font-size: 0.95rem;
+            }
+
+            .custom-amount input {
+                padding: 0.75rem;
+            }
+
+            .donation-info {
+                padding: 1rem;
+            }
+
+            .donation-image img {
+                max-height: 397px;
+                width: 100%;
+                object-fit: cover;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary, .btn-secondary {
+                padding: 0.85rem;
+                font-size: 0.95rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                padding: 0 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -655,7 +786,10 @@
         <i class="fas fa-hands-helping"></i>
         <span>BE 1 HELPING HAND</span>
     </div>
-    <nav>
+    <button class="menu-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+    </button>
+    <nav id="main-nav">
         <a href="#">Home</a>
         <a href="#" class="active">Donate</a>
         <a href="#">Causes</a>
@@ -945,6 +1079,26 @@
                     symbol.textContent = "₹";
                 });
             }
+        }
+
+        // Mobile header: toggle nav open/close for small screens
+        const menuToggle = document.querySelector('.menu-toggle');
+        const mainNav = document.getElementById('main-nav');
+        if (menuToggle && mainNav) {
+            menuToggle.addEventListener('click', function() {
+                const isOpen = mainNav.classList.toggle('open');
+                this.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+
+            // Close menu when a nav link is clicked (mobile)
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mainNav.classList.contains('open')) {
+                        mainNav.classList.remove('open');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
         }
     });
 </script>
